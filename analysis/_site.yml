@@ -1,7 +1,7 @@
-name: "WI_Dental_Survey"
+name: WI_Dental_Survey
 output_dir: ../docs
 navbar:
-  title: "WI_Dental_Survey"
+  title: WI_Dental_Survey
   left:
   - text: Home
     href: index.html
@@ -9,6 +9,10 @@ navbar:
     href: about.html
   - text: License
     href: license.html
+  right:
+  - icon: fab fa-github
+    text: Source code
+    href: https://github.com/han16/WI_Dental_Survey
 output:
   workflowr::wflow_html:
     toc: yes
