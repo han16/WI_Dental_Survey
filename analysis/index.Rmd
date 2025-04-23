@@ -1,11 +1,24 @@
 ---
-title: "Home"
-site: workflowr::wflow_site
+title: "07/31/2024"
 output:
   workflowr::wflow_html:
-    toc: false
-editor_options:
-  chunk_output_type: console
+    code_folding: hide
+    toc: true
 ---
 
-Welcome to my research website.
+
+
+
+
+## 1.  [Hygienist analysis in WI](2024_0701_survey_part2.html)
+
+
+
+## 2.   [Dentist in WI analysis](2024_0701_survey_part3.html)
+
+### 2.1  [association between race and  other factors](2024_0701_survry_part3_01_racevsothers.html)
+
+### 2.2 [geographical distribution of dentists](2024_0701_survey_part3_02_geographicaldistribution.html)
+
+
+
