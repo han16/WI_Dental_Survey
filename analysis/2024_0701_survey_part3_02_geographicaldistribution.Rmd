@@ -17,7 +17,7 @@ root <- rprojroot::find_rstudio_root_file()
 
 
 ```{r, echo=F, message=F, warning=F, results=F}
-source(file.path(root, "analysis/Rfunctions.R"))
+source("C:\\Shengtong\\Research\\AllCollaboration\\Collaborations\\analysis\\Rfunctions.R")
 changeCellColor <- function(row, col){
   c(
     "function(row, data, num, index){",
@@ -137,7 +137,7 @@ side_by_side_barplot3=function(data, angle=0, num_size=3, x_text_size=10, legend
 
 
 ```{r, message=F, warning=F, results=F, eval=F}
-#Dentist_Survey=multiplesheets(file.path(root, "..\\2024\\202407\\state_survey\\Dentist Survey.xlsx"))
+#Dentist_Survey=multiplesheets(file.path(root, "....\\AllCollaboration\\2024\\202407\\state_survey\\Dentist Survey.xlsx"))
 Dentist_Survey=multiplesheets("C:\\Shengtong\\Research\\AllCollaboration\\2024\\202407\\state_survey\\Dentist Survey.xlsx")
 Dentist_in_WI=Dentist_Survey$`Dentist Survey` %>% filter(`direct care as a dentist in Wisconsin`=="Yes")
 #save(Dentist_in_WI, file="C:\\Shengtong\\Research\\AllCollaboration\\2024\\202407\\Dentist_in_WI.RData")
@@ -150,7 +150,7 @@ Dentist_in_WI=Dentist_Survey$`Dentist Survey` %>% filter(`direct care as a denti
 
 ```{r, message=F, warning=F}
 root <- rprojroot::find_rstudio_root_file()
-load(file.path(root,"..\\2024\\202407\\Dentist_in_WI.RData"))
+load(file.path(root,"..\\..\\AllCollaboration\\2024\\202407\\Dentist_in_WI.RData"))
 
 variables=colnames(Dentist_in_WI)
 #data.frame(questions=variables)%>%
@@ -416,7 +416,7 @@ dentist_in_WI_of_interest1=dentist_in_WI_of_interest %>% mutate(ages=ages)
 
 # Save the objects
 #save(zip_codes_and_counties, dhs_zones, file = file.path(root, "..\\2024\\202407\\zip_code_details.RData"))
-load(file.path(root, "..\\2024\\202407\\zip_code_details.RData"))
+load(file.path(root, "..\\..\\AllCollaboration\\2024\\202407\\zip_code_details.RData"))
 
 zip_code_county_zone=zip_codes_and_counties %>% left_join(dhs_zones, by="county")
 zip_code_county_zone$zip_code=as.character(zip_code_county_zone$zip_code)
@@ -496,7 +496,7 @@ specialty_zones_data=data.frame(geo=rep(zones,each=length(specialty)), num=as.ve
 create_bar_plot <- function(region) {
   data <- specialty_zones_data %>% filter(geo == region)
   max_y <- max(data$num) + 10
-  
+
   ggplot(data, aes(x = spect, y = num, fill = spect)) +
     geom_bar(position = "dodge", stat = "identity") +
     ylim(0, max_y) +
@@ -518,3 +518,56 @@ ggarrange(plotlist = figures, ncol = 3)
 
 
 ```
+
+
+### age distribution 
+
+
+
+```{r, message=F, warning=F, eval=T}
+zones=unique(dentist_in_WI_of_interest1$zone)
+zones=zones[is.na(zones)==F]
+
+age_zones=sapply(zones, function(x) dentist_in_WI_of_interest1 %>% filter(zone %in% x) %>% select(ages))
+
+count_age=function(ages)
+{
+  age_groups=paste(seq(1:5), c("<40", "40-50", "50-60", "60-70", ">70"), sep=":")
+  
+  age_groups_count=numeric(length(age_groups))
+  age_groups_count[1]=sum(ages<40)
+  age_groups_count[2]=sum(ages>=40 & ages<50)
+  age_groups_count[3]=sum(ages>=50 & ages<60)
+  age_groups_count[4]=sum(ages>=60 & ages<70)
+  age_groups_count[5]=sum(ages>=70)
+  
+ return(data.frame(age_groups=age_groups, count=age_groups_count)) 
+}
+age_zones_groups=lapply(age_zones, count_age)
+combined_age_groups = do.call(rbind, age_zones_groups)
+combined_age_groups$zone <- rep(zones, each = 5)
+
+
+# Calculate proportions within each age group
+combined_age_groups <- combined_age_groups %>%
+  group_by(age_groups) %>%
+  mutate(proportion = count / sum(count),
+         label = paste0(count, " (", round(proportion * 100, 1), "%)"))
+
+# Plot
+ggplot(combined_age_groups, aes(x = zone, y = count, fill = age_groups)) +
+  geom_bar(stat = "identity", position = position_dodge(width = 0.9)) +
+  geom_text(aes(label = label), 
+            position = position_dodge(width = 0.9), 
+            vjust = -0.3, size = 2) +
+  labs(title = "Age Group Distribution by Zone",
+       x = "", y = "n",
+       fill = "Age Group") +
+  theme(legend.position="bottom")+
+  theme(axis.text.x = element_text(angle = 0, hjust = 0.5, size = 12))+
+  theme(plot.title = element_text(hjust = 0.5, size=15))  #center the title
+
+```
+
+
+

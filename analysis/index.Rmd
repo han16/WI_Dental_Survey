@@ -16,6 +16,9 @@ output:
 
 ## 2.   [Dentist in WI analysis](2024_0701_survey_part3.html)
 
+
+
+
 ### 2.1  [association between race and  other factors](2024_0701_survry_part3_01_racevsothers.html)
 
 ### 2.2 [geographical distribution of dentists](2024_0701_survey_part3_02_geographicaldistribution.html)

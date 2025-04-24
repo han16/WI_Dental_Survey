@@ -18,7 +18,7 @@ root <- rprojroot::find_rstudio_root_file()
 
 
 ```{r, echo=F, message=F, warning=F, results=F}
-source(file.path(root, "analysis/Rfunctions.R"))
+source("C:\\Shengtong\\Research\\AllCollaboration\\Collaborations\\analysis\\Rfunctions.R")
 changeCellColor <- function(row, col){
   c(
     "function(row, data, num, index){",
